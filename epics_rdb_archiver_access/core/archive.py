@@ -53,4 +53,4 @@ class CoreArchive(ArchiveConnection):
 
     @cached_property
     def pvname_to_channelid_map(self):
-        return {value: key for key, value in self.channel_id_map.items()}
+        return {value: key for key, value in self.channelid_to_pvname_map.items()}
