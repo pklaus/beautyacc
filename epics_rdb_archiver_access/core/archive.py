@@ -22,17 +22,16 @@ class CoreArchive(ArchiveConnection):
         # Quering those properties once to have them cached:
         self.all_pv_names
         self.channelid_to_pvname_map
+        self.pvname_to_channelid_map
         # Marking the initialization as 'done'
         self._initialized = True
 
     @lru_cache(maxsize=4096)
-    def channelid_of_pvname(self, pv_name):
-        sql = """SELECT channel_id FROM archive.channel
-                 WHERE archive.channel.name = '{}';""".format(pv_name)
-        with self._conn.cursor() as curs:
-            curs.execute(sql)
-            data = curs.fetchone()
-            return data[0] if data else None
+    def channelid_of_pvname(self, pvname):
+        try:
+            return self.pvname_to_channelid_map[pvname]
+        except KeyError:
+            return None
 
     @cached_property
     def all_pv_names(self):
