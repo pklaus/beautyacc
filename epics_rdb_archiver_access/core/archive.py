@@ -13,6 +13,18 @@ class ArchiveConnection:
 
 class CoreArchive(ArchiveConnection):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._initialize()
+
+    def _initialize(self):
+        #self._channel_mapping = {'by_id': {}, 'by_pvname': {}}
+        # Quering those properties once to have them cached:
+        self.all_pv_names
+        self.channelid_to_pvname_map
+        # Marking the initialization as 'done'
+        self._initialized = True
+
     @lru_cache(maxsize=4096)
     def channelid_of_pvname(self, pv_name):
         sql = """SELECT channel_id FROM archive.channel
