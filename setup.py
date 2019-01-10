@@ -1,5 +1,10 @@
 from setuptools import find_packages, setup
 
+# Monkey patching setuptools' safe_name function
+# to allow a package name containing underscores
+import pkg_resources
+pkg_resources.safe_name = lambda x: x
+
 try:
     import pypandoc
     LDESC = open('README.md', 'r').read()
