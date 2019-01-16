@@ -1,6 +1,6 @@
 import psycopg2, psycopg2.extras
 
-from epics_rdb_archiver_access.util.caching import cached_property
+from beautyacc.util.caching import cached_property
 from functools import lru_cache
 
 class ArchiveConnection:

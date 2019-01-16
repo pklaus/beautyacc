@@ -14,11 +14,11 @@ except (ImportError, IOError, RuntimeError) as e:
     print(str(e))
     LDESC = ''
 
-setup(name='epics_rdb_archiver_access',
+setup(name='beautyacc',
       version='0.1.dev0',
       description='Python package to access the EPICS RDB Archiver',
       long_description=LDESC,
-      url='https://github.com/pklaus/epics_rdb_archiver_access',
+      url='https://github.com/pklaus/beautyacc',
       author='Philipp Klaus',
       author_email='klaus@physik.uni-frankfurt.de',
       packages = find_packages(),

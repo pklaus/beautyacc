@@ -1,6 +1,7 @@
-# epics\_rdb\_archiver\_access
+# beautyacc
 
 Python package to access the EPICS RDB Archiver
+also called "beauty".
 
 This package was crafted for Python 3.4 or newer.
 
@@ -8,9 +9,9 @@ This package was crafted for Python 3.4 or newer.
 
 Installing from PyPI is easy:
 
-    pip install epics_rdb_archiver_access
+    pip install beautyacc
 
 ### Resources
 
-* Github: <https://github.com/pklaus/epics_rdb_archiver_access>
-* PyPI: <https://pypi.org/project/epics_rdb_archiver_access/>
+* Github: <https://github.com/pklaus/beautyacc>
+* PyPI: <https://pypi.org/project/beautyacc/>
