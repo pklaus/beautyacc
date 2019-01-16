@@ -15,7 +15,7 @@ except (ImportError, IOError, RuntimeError) as e:
     LDESC = ''
 
 setup(name='beautyacc',
-      version='0.1.dev0',
+      version='0.2.dev0',
       description='Python package to access the EPICS RDB Archiver',
       long_description=LDESC,
       url='https://github.com/pklaus/beautyacc',
