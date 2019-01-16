@@ -1,7 +1,8 @@
 # beautyacc
 
-Python package to access the EPICS RDB Archiver
-also called "beauty".
+beautyacc is a library to access EPICS archiver values in Python.
+It is designed for the EPICS RDB Archiver called "beauty".
+The name beautyacc is shorthand for 'beauty access'.
 
 This package was crafted for Python 3.4 or newer.
 
