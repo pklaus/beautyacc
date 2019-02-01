@@ -3,6 +3,8 @@ import psycopg2, psycopg2.extras
 from beautyacc.util.caching import cached_property
 from functools import lru_cache
 
+from .models import Channel
+
 class ArchiveConnection:
 
     def __init__(self, host, user="report", port=5432, dbname="archive"):
@@ -53,3 +55,23 @@ class CoreArchive(ArchiveConnection):
     @cached_property
     def pvname_to_channelid_map(self):
         return {value: key for key, value in self.channelid_to_pvname_map.items()}
+
+    @cached_property
+    def grpid_to_grpname_map(self):
+        sql = "SELECT grp_id, name FROM chan_grp;"
+        with self._conn.cursor() as curs:
+            curs.execute(sql)
+            id_map = {el[0]: el[1] for el in curs.fetchall()}
+        return id_map
+
+    @cached_property
+    def grpname_to_grpid_map(self):
+        return {value: key for key, value in self.grpid_to_grpname_map.items()}
+
+    @lru_cache(maxsize=65536)
+    def fetch_channel(self, channel_id):
+        sql = "SELECT * FROM archive.channel WHERE archive.channel.channel_id = %s;"
+        with self._conn.cursor() as curs:
+            curs.execute(sql, (channel_id,))
+            data = curs.fetchone()
+        return Channel(*data)

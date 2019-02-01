@@ -23,7 +23,10 @@ setup(name='beautyacc',
       author_email='klaus@physik.uni-frankfurt.de',
       packages = find_packages(),
       py_modules=[],
-      install_requires=['psycopg2-binary'],
+      install_requires=[
+          'psycopg2-binary',
+          'attrs',
+      ],
       zip_safe=True,
       classifiers = [
           'Development Status :: 4 - Beta',
