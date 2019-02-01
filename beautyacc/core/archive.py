@@ -3,7 +3,8 @@ import psycopg2, psycopg2.extras
 from beautyacc.util.caching import cached_property
 from functools import lru_cache
 
-from .models import Channel
+from .models import (Channel, ChannelGroup, SampleMode, Severity, Status,
+                     NumMetadata, EnumMetadata)
 
 class ArchiveConnection:
 
@@ -27,6 +28,8 @@ class CoreArchive(ArchiveConnection):
         self.pvname_to_channelid_map
         # Marking the initialization as 'done'
         self._initialized = True
+        # Auto-generate methods according to classes in beautyacc.core.models
+        self._populate_fetch_methods()
 
     @lru_cache(maxsize=65536)
     def channelid_of_pvname(self, pvname):
@@ -68,10 +71,42 @@ class CoreArchive(ArchiveConnection):
     def grpname_to_grpid_map(self):
         return {value: key for key, value in self.grpid_to_grpname_map.items()}
 
+    def _populate_fetch_methods(self):
+        """
+        populates the following methods:
+        .fetch_channel(channel_id)
+        .fetch_chan_grp()
+        .fetch_smpl_mode()
+        .fetch_severity()
+        .fetch_status()
+        .fetch_num_metadata()
+        """
+        for cls in (Channel, ChannelGroup, SampleMode, Severity, Status,
+                    NumMetadata):
+            def func_factory(self, cls):
+                def func(cls_id):
+                    sql = "SELECT * FROM archive.{table} WHERE " \
+                          "archive.{table}.{id_field} = %s;".format(
+                              table=cls.table,
+                              id_field=cls.id_field)
+                    with self._conn.cursor() as curs:
+                        curs.execute(sql, (cls_id,))
+                        data = curs.fetchone()
+                    if data is not None:
+                        return cls(*data)
+                    else:
+                        return None
+                return func
+            func = func_factory(self, cls)
+            func = lru_cache(maxsize=65536)(func)
+            setattr(self, 'fetch_' + cls.table, func)
+            setattr(self, 'fetch_' + cls.__name__, func)
+
     @lru_cache(maxsize=65536)
-    def fetch_channel(self, channel_id):
-        sql = "SELECT * FROM archive.channel WHERE archive.channel.channel_id = %s;"
+    def fetch_enum_metadata(self, channel_id):
+        sql = "SELECT enum_nbr, enum_val FROM archive.enum_metadata WHERE " \
+              "archive.enum_metadata.channel_id = %s;"
         with self._conn.cursor() as curs:
             curs.execute(sql, (channel_id,))
-            data = curs.fetchone()
-        return Channel(*data)
+            enum_map = {el[0]: el[1] for el in curs.fetchall()}
+        return enum_map
