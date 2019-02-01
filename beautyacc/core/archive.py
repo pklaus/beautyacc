@@ -26,7 +26,7 @@ class CoreArchive(ArchiveConnection):
         # Marking the initialization as 'done'
         self._initialized = True
 
-    @lru_cache(maxsize=4096)
+    @lru_cache(maxsize=65536)
     def channelid_of_pvname(self, pvname):
         try:
             return self.pvname_to_channelid_map[pvname]
