@@ -14,7 +14,7 @@ class Channel(object):
     id_field = 'channel_id'
     channel_id = attrib(type=int)
     name = attrib(type=str)
-    desr = attrib(type=str)
+    descr = attrib(type=str)
     grp_id = attrib(type=int)
     smpl_mode_id = attrib(type=int)
     smpl_val = attrib(type=float)

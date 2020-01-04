@@ -26,6 +26,8 @@ setup(name='beautyacc',
       install_requires=[
           'psycopg2-binary',
           'attrs',
+          'pandas',
+          'numpy',
       ],
       zip_safe=True,
       classifiers = [
