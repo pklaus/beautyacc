@@ -170,3 +170,24 @@ class CoreArchive(ArchiveConnection):
             #    if not rows:
             #        break
             #    yield rows
+
+    def infer_target_column(self, pv_name):
+        if type(pv_name) == int:
+            channel_id = pv_name
+        else:
+            channel_id = self.channelid_of_pvname(pv_name)
+        sql = "SELECT num_val, float_val, str_val "
+        sql += "FROM archive.sample "
+        sql += "WHERE archive.sample.channel_id = {} ".format(channel_id)
+        sql += "LIMIT 1;"
+        with self._conn.cursor() as curs:
+            curs.execute(sql)
+            num_val, float_val, str_val = curs.fetchone()
+        if num_val is not None:
+            return 'num_val'
+        elif float_val is not None:
+            return 'float_val'
+        elif str_val is not None:
+            return 'str_val'
+        else:
+            raise ValueError('all fields are empty')
